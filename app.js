@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose'); // <-- Добавили Mongoose
+require('dotenv').config(); // <-- Добавили dotenv
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -10,18 +12,23 @@ var gamesRouter = require('./routes/games');
 
 var app = express();
 
-// --- НАСТРОЙКА ШАБЛОНИЗАТОРА ---
+// ПОДКЛЮЧЕНИЕ К БАЗЕ ДАННЫХ
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('✅ MongoDB connected successfully'))
+    .catch(err => console.log('❌ MongoDB connection error. Server will run without DB. Details:', err.message));
+
+// НАСТРОЙКА ШАБЛОНИЗАТОРА
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// --- СТАНДАРТНЫЕ MIDDLEWARE ---
+// СТАНДАРТНЫЕ MIDDLEWARE
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- НАСТРОЙКА ЯЗЫКОВ (i18n) ---
+//  НАСТРОЙКА ЯЗЫКОВ (i18n)
 var en = require('./locales/en');
 var ru = require('./locales/ru');
 
