@@ -1,8 +1,42 @@
 <%- include('partials/header') %>
 
-<h2>Our Games / Наши игры</h2>
-<p>Game list will be here soon... / Список игр скоро появится здесь...</p>
+<h2><%= t.games.title %></h2>
+<p><%= t.games.desc %></p>
 
-<a href="/" class="btn-gold">Back to Home / На главную</a>
+<div class="row">
+    <% if (typeof games !== 'undefined' && games.length > 0) { %>
+        <% games.forEach(function(game) { %>
+            <div class="col-md-4 mb-4">
+                <div class="card bg-secondary text-light h-100 border-warning shadow-sm">
+                    <!-- Картинка игры (если есть) -->
+                    <% if (game.image) { %>
+                        <img src="<%= game.image %>" class="card-img-top" alt="<%= game.title_en %>" style="height: 200px; object-fit: cover;">
+                    <% } %>
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-warning">
+                            <%= lang === 'ru' ? game.title_ru : game.title_en %>
+                        </h5>
+                        <p class="card-text flex-grow-1">
+                            <%= lang === 'ru' ? game.description_ru : game.description_en %>
+                        </p>
+                        <p class="text-light opacity-75 mb-2">
+                            RTP: <span class="badge bg-dark"><%= game.rtp %>%</span>
+                        </p>
+                        <a href="#" class="btn btn-outline-warning w-100 mt-auto">Play / Играть</a>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="col-12">
+            <div class="alert alert-warning">
+                No games found. Please seed the database / Игры не найдены. Запустите посев базы.
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<a href="/" class="btn-gold mt-4"><%= t.games.btn %></a>
 
 <%- include('partials/footer') %>
