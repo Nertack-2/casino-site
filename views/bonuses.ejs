@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+
+<h2><%= lang === 'ru' ? 'Бонусы и Акции' : 'Bonuses and Promotions' %></h2>
+<p><%= lang === 'ru' ? 'Получите лучшие предложения от нашего казино!' : 'Get the best offers from our casino!' %></p>
+
+<div class="row mt-4">
+    <% if (bonuses && bonuses.length > 0) { %>
+        <% bonuses.forEach(function(bonus) { %>
+            <div class="col-md-6 mb-4">
+                <div class="card bg-dark text-light border-warning h-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h3 class="text-warning mb-3"><%= bonus.amount %></h3>
+                        <h5 class="card-title"><%= lang === 'ru' ? bonus.title_ru : bonus.title_en %></h5>
+                        <p class="card-text flex-grow-1"><%= lang === 'ru' ? bonus.description_ru : bonus.description_en %></p>
+                        <button class="btn btn-warning text-dark mt-3 fw-bold"><%= lang === 'ru' ? 'Забрать бонус' : 'Claim Bonus' %></button>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="col-12">
+            <div class="alert alert-warning">No bonuses found / Бонусы не найдены</div>
+        </div>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>
