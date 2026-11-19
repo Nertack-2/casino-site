@@ -8,7 +8,6 @@
         <% games.forEach(function(game) { %>
             <div class="col-md-4 mb-4">
                 <div class="card bg-secondary text-light h-100 border-warning shadow-sm">
-                    <!-- Картинка игры (если есть) -->
                     <% if (game.image) { %>
                         <img src="<%= game.image %>" class="card-img-top" alt="<%= game.title_en %>" style="height: 200px; object-fit: cover;">
                     <% } %>
@@ -23,7 +22,7 @@
                         <p class="text-light opacity-75 mb-2">
                             RTP: <span class="badge bg-dark"><%= game.rtp %>%</span>
                         </p>
-                        <a href="#" class="btn btn-outline-warning w-100 mt-auto">Play / Играть</a>
+                        <a href="/games/<%= game.slug %>" class="btn btn-outline-warning w-100 mt-auto">Play / Играть</a>
                     </div>
                 </div>
             </div>
