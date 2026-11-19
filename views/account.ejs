@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card bg-dark border-warning text-center p-5">
+            <h2 class="text-warning mb-4">Личный кабинет / My Account</h2>
+            <h4 class="text-light">👤 <%= user.username %></h4>
+            <p class="text-muted"><%= user.email %></p>
+
+            <div class="mt-4 p-4 bg-black rounded border border-secondary">
+                <h5 class="text-light">Ваш баланс / Your Balance</h5>
+                <h1 class="text-success display-4">$<%= user.balance %></h1>
+            </div>
+
+            <a href="/bonuses" class="btn btn-warning mt-4 fw-bold text-dark">Забрать бонусы / Claim Bonuses</a>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

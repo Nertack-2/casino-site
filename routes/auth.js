@@ -34,13 +34,12 @@ router.get('/login', function(req, res) {
 router.post('/login', function(req, res) {
     var { email, password } = req.body;
 
-    // Ищем пользователя по email и паролю
     User.findOne({ email: email, password: password })
         .then(user => {
             if (!user) {
                 return res.send('Неверный email или пароль / Invalid email or password');
             }
-            req.session.user = user; // Авторизуем
+            req.session.user = user;
             res.redirect('/');
         })
         .catch(err => {

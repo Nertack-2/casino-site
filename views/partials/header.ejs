@@ -29,7 +29,7 @@
                     <!-- Блок пользователя -->
                     <% if (user) { %>
                         <li class="nav-item">
-                            <span class="nav-link text-success fw-bold">👤 <%= user.username %> | $<%= user.balance %></span>
+                            <a class="nav-link text-success fw-bold" href="/account">👤 <%= user.username %> | $<%= user.balance %></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-danger" href="/auth/logout">Logout</a>
