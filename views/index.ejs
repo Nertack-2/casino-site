@@ -1,8 +1,9 @@
 <%- include('partials/header') %>
+<h2><%= t.index.title %></h2>
+<p><%= t.index.desc %></p>
 
-<h2>Welcome to the best online casino! / Добро пожаловать в лучшее онлайн-казино!</h2>
-<p>Here you can play the best games and win big. / Здесь вы можете играть в лучшие игры и выигрывать большие призы.</p>
+<a href="/games" class="btn-gold"><%= t.index.btn %></a>
 
-<a href="/games" class="btn-gold">Go to Games / Перейти к играм</a>
+<p class="mt-4" style="color: #d4af37; font-weight: bold;">Вы посетили эту страницу <%= visits %> раз(а).</p>
 
 <%- include('partials/footer') %>
