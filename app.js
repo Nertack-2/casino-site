@@ -11,7 +11,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gamesRouter = require('./routes/games');
 var bonusesRouter = require('./routes/bonuses');
-var authRouter = require('./routes/auth'); // <-- Подключили auth
+var authRouter = require('./routes/auth');
+var accountRouter = require('./routes/account'); // <-- Важно для 8.4
 
 var app = express();
 
@@ -39,7 +40,7 @@ app.use(session({
   cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// --- НАСТРОЙКА ЯЗЫКОВ (i18n) ---
+// --- НАСТРОЙКА ЯЗЫКОВ (i18n) и ПОЛЬЗОВАТЕЛЯ ---
 var en = require('./locales/en');
 var ru = require('./locales/ru');
 
@@ -62,7 +63,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/games', gamesRouter);
 app.use('/bonuses', bonusesRouter);
-app.use('/auth', authRouter); // <-- Подключили auth
+app.use('/auth', authRouter);
+app.use('/account', accountRouter); // <-- Подключили маршрут аккаунта
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
