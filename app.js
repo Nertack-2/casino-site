@@ -11,13 +11,14 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gamesRouter = require('./routes/games');
 var bonusesRouter = require('./routes/bonuses');
+var authRouter = require('./routes/auth'); // <-- Подключили auth
 
 var app = express();
 
 // --- ПОДКЛЮЧЕНИЕ К БАЗЕ ДАННЫХ ---
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ MongoDB connected successfully'))
-    .catch(err => console.log('❌ MongoDB connection error. Server will run without DB. Details:', err.message));
+    .catch(err => console.log('❌ MongoDB connection error. Details:', err.message));
 
 // --- НАСТРОЙКА ШАБЛОНИЗАТОРА ---
 app.set('views', path.join(__dirname, 'views'));
@@ -35,7 +36,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'casino_secret_key',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 часа
+  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
 // --- НАСТРОЙКА ЯЗЫКОВ (i18n) ---
@@ -51,6 +52,8 @@ app.use(function(req, res, next) {
     res.locals.t = en;
     res.locals.lang = 'en';
   }
+  // Передаем пользователя во все шаблоны
+  res.locals.user = req.session.user || null;
   next();
 });
 
@@ -59,6 +62,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/games', gamesRouter);
 app.use('/bonuses', bonusesRouter);
+app.use('/auth', authRouter); // <-- Подключили auth
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
