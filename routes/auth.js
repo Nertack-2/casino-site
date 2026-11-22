@@ -28,7 +28,6 @@ router.post('/register', function(req, res) {
 
 // --- 10.4 & 10.6: Страница входа (Login) ---
 router.get('/login', function(req, res) {
-    // Берем ошибку из сессии (если есть) и сразу удаляем её
     var error = req.session.error;
     req.session.error = null;
     res.render('login', { error: error });
@@ -41,7 +40,6 @@ router.post('/login', function(req, res) {
     User.findOne({ email: email, password: password })
         .then(user => {
             if (!user) {
-                // Записываем ошибку в сессию и возвращаем на страницу входа
                 req.session.error = 'Неверный email или пароль / Invalid email or password';
                 return res.redirect('/auth/login');
             }
@@ -54,12 +52,15 @@ router.post('/login', function(req, res) {
         });
 });
 
-// --- 10.7: Логика выхода (Logout) ---
+// --- 10.7: Функциональность logout ---
 router.get('/logout', function(req, res) {
     req.session.destroy((err) => {
-        if (err) return res.redirect('/');
-        res.clearCookie('connect.sid');
-        res.redirect('/');
+        if (err) {
+            console.error('Ошибка при выходе:', err);
+            return res.redirect('/');
+        }
+        res.clearCookie('connect.sid'); // Очищаем куку сессии
+        res.redirect('/'); // Возвращаем на главную
     });
 });
 
