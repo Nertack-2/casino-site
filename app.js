@@ -19,8 +19,8 @@ var app = express();
 
 // --- ПОДКЛЮЧЕНИЕ К БАЗЕ ДАННЫХ ---
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ MongoDB connected successfully'))
-    .catch(err => console.log('❌ MongoDB connection error. Details:', err.message));
+  .then(() => console.log('✅ MongoDB connected successfully'))
+  .catch(err => console.log('❌ MongoDB connection error. Details:', err.message));
 
 // --- НАСТРОЙКА ШАБЛОНИЗАТОРА ---
 app.set('views', path.join(__dirname, 'views'));
@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // --- НАСТРОЙКА СЕССИЙ С СОХРАНЕНИЕМ В MONGODB ---
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'casino_secret_key',
+  secret: process.env.SESSION_SECRET || 'casino_secret_key', 
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
@@ -56,8 +56,11 @@ app.use(function(req, res, next) {
     res.locals.lang = 'en';
   }
 
+  // 10.5: Глобальная переменная user
   res.locals.user = req.session.user || null;
-  res.locals.nav = res.locals.t.nav;
+  
+  // 9.5: Глобальная переменная для навигации
+  res.locals.nav = res.locals.t.nav; 
 
   next();
 });
@@ -67,7 +70,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/games', gamesRouter);
 app.use('/bonuses', bonusesRouter);
-app.use('/auth', authRouter); // <-- ВОТ ЭТА СТРОКА ДОЛЖНА БЫТЬ
+app.use('/auth', authRouter);
 app.use('/account', accountRouter);
 
 // catch 404 and forward to error handler
