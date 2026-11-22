@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var session = require('express-session');
-var { MongoStore } = require('connect-mongo'); // <-- ИСПРАВЛЕНО
+var { MongoStore } = require('connect-mongo');
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
@@ -33,16 +33,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- 9.1 & 9.3: НАСТРОЙКА СЕССИЙ С СОХРАНЕНИЕМ В MONGODB ---
+// --- НАСТРОЙКА СЕССИЙ С СОХРАНЕНИЕМ В MONGODB ---
 app.use(session({
   secret: process.env.SESSION_SECRET || 'casino_secret_key',
   resave: false,
   saveUninitialized: true,
-  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }), // <-- Теперь работает
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// --- НАСТРОЙКА ЯЗЫКОВ (i18n) И ПОЛЬЗОВАТЕЛЯ ---
+// --- НАСТРОЙКА ЯЗЫКОВ, ПОЛЬЗОВАТЕЛЯ И НАВИГАЦИИ (i18n) ---
 var en = require('./locales/en');
 var ru = require('./locales/ru');
 
@@ -55,7 +55,12 @@ app.use(function(req, res, next) {
     res.locals.t = en;
     res.locals.lang = 'en';
   }
+
   res.locals.user = req.session.user || null;
+
+  // 9.5: Глобальная переменная для навигации
+  res.locals.nav = res.locals.t.nav;
+
   next();
 });
 
