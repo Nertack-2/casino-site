@@ -10,9 +10,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { visits: req.session.visits });
 });
 
+// --- 9.2: ЗАПИСЬ ЯЗЫКА В COOKIE ---
 router.get('/lang/:lang', function(req, res) {
   var lang = req.params.lang;
   if (lang === 'en' || lang === 'ru') {
+    // Записываем выбранный язык в куку на 15 минут
     res.cookie('lang', lang, { maxAge: 900000, httpOnly: true });
   }
   res.redirect('back');
