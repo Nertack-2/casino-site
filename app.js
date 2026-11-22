@@ -12,7 +12,7 @@ var usersRouter = require('./routes/users');
 var gamesRouter = require('./routes/games');
 var bonusesRouter = require('./routes/bonuses');
 var authRouter = require('./routes/auth');
-var accountRouter = require('./routes/account'); // <-- Важно для 8.4
+var accountRouter = require('./routes/account');
 
 var app = express();
 
@@ -32,15 +32,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- НАСТРОЙКА СЕССИЙ ---
+// --- 9.1: УСТАНОВКА МОДУЛЯ EXPRESS-SESSION И НАСТРОЙКА COOKIE ---
 app.use(session({
   secret: process.env.SESSION_SECRET || 'casino_secret_key',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
+  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // Кука живет 24 часа
 }));
 
-// --- НАСТРОЙКА ЯЗЫКОВ (i18n) и ПОЛЬЗОВАТЕЛЯ ---
+// --- НАСТРОЙКА ЯЗЫКОВ (i18n) И ПОЛЬЗОВАТЕЛЯ ---
 var en = require('./locales/en');
 var ru = require('./locales/ru');
 
@@ -53,7 +53,6 @@ app.use(function(req, res, next) {
     res.locals.t = en;
     res.locals.lang = 'en';
   }
-  // Передаем пользователя во все шаблоны
   res.locals.user = req.session.user || null;
   next();
 });
@@ -64,7 +63,7 @@ app.use('/users', usersRouter);
 app.use('/games', gamesRouter);
 app.use('/bonuses', bonusesRouter);
 app.use('/auth', authRouter);
-app.use('/account', accountRouter); // <-- Подключили маршрут аккаунта
+app.use('/account', accountRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
