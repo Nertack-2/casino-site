@@ -12,24 +12,28 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gamesRouter = require('./routes/games');
 var bonusesRouter = require('./routes/bonuses');
-var authRouter = require('./routes/auth'); // <-- Подключили auth
+var authRouter = require('./routes/auth');
 var accountRouter = require('./routes/account');
 
 var app = express();
 
+// --- ПОДКЛЮЧЕНИЕ К БАЗЕ ДАННЫХ ---
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ MongoDB connected successfully'))
     .catch(err => console.log('❌ MongoDB connection error. Details:', err.message));
 
+// --- НАСТРОЙКА ШАБЛОНИЗАТОРА ---
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// --- СТАНДАРТНЫЕ MIDDLEWARE ---
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false })); // <-- Важно для форм
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// --- НАСТРОЙКА СЕССИЙ С СОХРАНЕНИЕМ В MONGODB ---
 app.use(session({
   secret: process.env.SESSION_SECRET || 'casino_secret_key',
   resave: false,
@@ -38,6 +42,7 @@ app.use(session({
   cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
+// --- НАСТРОЙКА ЯЗЫКОВ, ПОЛЬЗОВАТЕЛЯ И НАВИГАЦИИ ---
 var en = require('./locales/en');
 var ru = require('./locales/ru');
 
@@ -50,22 +55,30 @@ app.use(function(req, res, next) {
     res.locals.t = en;
     res.locals.lang = 'en';
   }
+
+  // 10.5: Глобальная переменная user
   res.locals.user = req.session.user || null;
+
+  // 9.5: Глобальная переменная для навигации
   res.locals.nav = res.locals.t.nav;
+
   next();
 });
 
+// --- МАРШРУТЫ ---
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/games', gamesRouter);
 app.use('/bonuses', bonusesRouter);
-app.use('/auth', authRouter); // <-- Подключили auth
+app.use('/auth', authRouter);
 app.use('/account', accountRouter);
 
+// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
+// error handler
 app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
