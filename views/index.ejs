@@ -1,9 +1,13 @@
 <%- include('partials/header') %>
+
 <h2><%= t.index.title %></h2>
 <p><%= t.index.desc %></p>
 
 <a href="/games" class="btn-gold"><%= t.index.btn %></a>
 
-<p class="mt-4" style="color: #d4af37; font-weight: bold;">Вы посетили эту страницу <%= visits %> раз(а).</p>
+<!-- 9.4: Вывод счетчика посещений -->
+<p class="mt-4" style="color: #d4af37; font-weight: bold;">
+    Вы посетили эту страницу <%= visits %> раз(а) / You have visited this page <%= visits %> times.
+</p>
 
 <%- include('partials/footer') %>
