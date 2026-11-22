@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var Bonus = require('../models/Bonus');
-var requireAuth = require('../middleware/auth');
+var requireAuth = require('../middleware/auth'); // <-- Подключаем защиту
 
+// 10.8: requireAuth не пустит гостей
 router.get('/', requireAuth, function(req, res, next) {
     Bonus.find({})
         .then(bonuses => {

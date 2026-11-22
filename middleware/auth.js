@@ -1,9 +1,8 @@
-// Проверка, авторизован ли пользователь
+// 10.8: Middleware для закрытия страниц для незалогиненного пользователя
 function requireAuth(req, res, next) {
     if (req.session && req.session.user) {
-        return next(); // Пользователь есть, пропускаем дальше
+        return next();
     }
-    // Если нет — перенаправляем на страницу входа
     res.redirect('/auth/login');
 }
 
